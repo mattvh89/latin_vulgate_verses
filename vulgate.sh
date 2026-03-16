@@ -51,8 +51,8 @@ if [ $# -eq 0 ]
 then
 	read -p "Book (? for list): " book
 	if [ "$book" == "?" ]; then
-		n=0
 		print_books
+		exit
 	fi
 	echo "------------------------------------"
 	read -p "Chapter: " chapter
