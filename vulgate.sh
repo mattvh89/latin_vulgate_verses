@@ -41,7 +41,6 @@ function print_books
 	echo " "
 	for book in "${new_testament[@]}"; do
 		echo "$book"
-		((++n))
 	done
 	exit
 }
