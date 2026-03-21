@@ -29,7 +29,6 @@ function help
 	  chapter                Chapter number (optional)
 	  verse                  Single verse (optional) or range (e.g., 3-5) or open-ended (e.g., 7-)
 	                         If verse is omitted, retrieves the whole chapter
-	                         
 	Examples:
 	  $0                          Prompt for input interactively
 	  $0 Genesis                  Retrieves the whole Book of Genesis
@@ -69,9 +68,8 @@ then
 		print_books
 		exit
 	fi
-	echo "------------------------------------"
 	read -p "Chapter: " chapter
-	read -p "Verse: " verse
+	read -p "Verse(s): " verse
 
 # Else if 1 argument was given, either list the books, give help string, 
 # or we're getting the list chapters in the book
