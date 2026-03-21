@@ -14,16 +14,32 @@ bool_new_testament=0
 bool_list_chapters=0
 
 # Function to print the usage of the script
+
 function help
 {
-	echo "Usage: $0 <book> <chapter> <verse>"
-	echo
-	echo "    Enter "?" for book to get a list of books"
-	echo "    Enter just the book to get a list of chapters"
-	echo "    <verse> provide a single number for a single verse"
-	echo "    <verse>-<verse> to get a range of verses"
-	echo "    <verse>- to get from the verse to the end"
-	exit
+	echo "\
+	Usage: $0 [options] [book [chapter [verse[-end_verse]]]]
+
+	Options:
+	  -s \"search terms\"     Search DuckDuckGo for a Bible verse matching the terms
+	  -h                     Display this help message
+
+	Arguments (if no options):
+	  book                   Name of the book (e.g., Genesis)
+	  chapter                Chapter number (optional)
+	  verse                  Single verse (optional) or range (e.g., 3-5) or open-ended (e.g., 7-)
+	                         If verse is omitted, retrieves the whole chapter
+	                         
+	Examples:
+	  $0                          Prompt for input interactively
+	  $0 Genesis                  Retrieves the whole Book of Genesis
+	  $0 Genesis 1                Retrieves Genesis chapter 1
+	  $0 Genesis 1 1              Retrieves Genesis 1:1
+	  $0 Genesis 1 1-5            Retrieves Genesis 1:1–5
+	  $0 Genesis 1 1-             Retrieves from Genesis 1:1 to the end of the chapter
+	  $0 -s \"synagogue of satan\" Searches DuckDuckGo and returns first matching Bible verse
+	  $0 -h                        Display this help
+"
 }
 
 # Function to list all the books in the old and new testament
@@ -60,11 +76,17 @@ then
 # Else if 1 argument was given, either list the books, give help string, 
 # or we're getting the list chapters in the book
 elif [[ $# -eq 1 ]];  then
-	if [ $1 == "?" ]; then
-		print_books
-	elif [[ $1 == "-h" ]]; then
-		help
-	fi
+	case $1 in
+		"?")
+			print_books
+			exit
+			;;
+		"-h")
+			help
+			exit
+			;;
+	esac
+
 
 	book=$1
 	chapter=1
@@ -74,9 +96,28 @@ elif [[ $# -eq 1 ]];  then
 # Else if 2 arguments were given, we want the whole entire chapter. Set it up
 # by setting verse to "1-"
 elif [[ $# -eq 2 ]]; then
-	book=$1
-	chapter=$2
-	verse="1-"
+	if [[ $1 == "-s" ]]; then
+		search_input="bible verse $2"
+		search_term="${search_input// /+}"
+
+		book_chapter_verse=$(ddgr --json "$search_input" \
+		| jq -r '.[] | select(.url | test("bible|scripture|vulgate"; "i")) | .title' \
+		| grep -oE '[1-3]?[A-Za-z]+[[:space:]]+[0-9]+:[0-9]+' \
+		| head -n1)
+
+		book_chapter_verse="${book_chapter_verse//:/ }"
+
+		book=$(echo $book_chapter_verse | awk '{print $1}')
+		chapter=$(echo $book_chapter_verse | awk '{print $2}')
+		verse=$(echo $book_chapter_verse | awk '{print $3}')
+
+		echo "$book $chapter:"
+
+	else
+		book=$1
+		chapter=$2
+		verse="1-"
+	fi
 
 # Otherwise we have a fully formed verse request
 elif [[ $# -eq 3 ]]; then
@@ -175,4 +216,3 @@ for((i=verse; i<=end_verse; ++i)); do
 done
 
 exit
-
