@@ -1,4 +1,8 @@
 #!/usr/bin/bash
+# Author: Matthew Van Helden
+# Date: March 21, 2026
+#
+# Christ is King
 
 readonly new_testament=("Matthew" "Mark" "Luke" "John" "Acts" "Romans" "1Cor" "2Cor" "Galatians" "Ephesians" "Phillipians" "Colossians" "1Thes" "2Thes" "1Timothy" "2Timothy" "Titus" "Philemon" "Hebrews" "James" "1Peter" "2Peter" "1John" "2John" "3John" "Jude" "Revelation")
 readonly old_testament=("Genesis" "Exodus" "Leviticus" "Numbers" "Deuteronemy" "Joshua" "Judges" "Ruth" "1Samual" "2Samual" "1Kings" "2Kings" "1Chronicles" "2Chronicles" "Ezra" "Nehemia" "Tobit" "Judith" "Esther" "Job" "Psalms" "Proverbs" "Ecclesiastes" "Solomen" "Wisdom" "Sirach" "Isiah" "Jeremiah" "Lamentations" "Baruch" "Ezekial" "Daniel" "Hosea" "Joel" "Amos" "Obediah" "Jonah" "Micah" "Nahum" "Habakkuk" "Zephania" "Haggai" "Zacharia" "Malachi" "1Maccabees" "2Maccabees")
